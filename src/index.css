@@ -1,0 +1,19 @@
+/*! @import */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.el-button--primary {
+  color: #fff;
+  /* background: linear-gradient(135deg, #ffa6b7 10%, #1e2ad2 100%); */
+  background-color: #f7d1ba;
+  border-color: transparent;
+  color: #557571;
+}
+.el-button--primary:hover,
+.el-button--primary:focus {
+  /* background: linear-gradient(135deg, #ffa6b7 20%, #1e2ad2 100%); */
+  background-color: #f7d1ba;
+  border-color: transparent;
+  color: #6a8f8b;
+}
