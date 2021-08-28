@@ -70,3 +70,6 @@ jobs:
             cd  /usr/share/nginx/html
             wget http://github.com/ElsaOOo/cover-app/releases/latest/download/release.zip -O release.zip
             unzip release.zip
+            mv ./dist/* .
+            rm -rf dist
+            rm release.zip
