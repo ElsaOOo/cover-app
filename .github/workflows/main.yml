@@ -41,8 +41,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }} # 之前GitHub添加的Token
         with:
-          tag_name: latest
-          release_name: Release latest
+          tag_name: ${{github.run_number}}
+          release_name: Release ${{github.run_number}}
           draft: false # 是否是草稿
           prerelease: false # 是否是预发布
 
