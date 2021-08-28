@@ -10,7 +10,7 @@
         <div class="bg border-b border-gray-700 mb-3">
           <div class="flex justify-between items-center mb-3">
             <span class="label">背景色</span>
-            <el-color-picker v-model="config.bgColor"></el-color-picker>
+            <el-color-picker v-model="state.config.bgColor"></el-color-picker>
           </div>
           <div class="mb-3 text-right">
             <color-recomend>
@@ -26,7 +26,13 @@
           </div>
           <div class="flex justify-between items-center mb-3">
             <span class="label">背景图片</span>
-            <el-upload :limit="1">
+            <el-upload
+              :limit="1"
+              action=""
+              :show-file-list="false"
+              @change="handleBgImg"
+              :before-upload="beforeUpload"
+            >
               <el-button size="small" type="primary">文件上传</el-button>
             </el-upload>
           </div>
@@ -38,7 +44,7 @@
               size="small"
               placeholder="请输入内容"
               style="width: 160px"
-              v-model="config.title"
+              v-model="state.config.title"
             />
           </div>
           <div class="flex justify-between items-center mb-3">
@@ -46,18 +52,39 @@
             <el-input-number
               size="small"
               style="width: 160px"
-              v-model="config.fontSize"
+              v-model="state.config.fontSize"
             />
           </div>
           <div class="flex justify-between items-center mb-3">
             <span class="label">文字颜色</span>
-            <el-color-picker v-model="config.titleColor"></el-color-picker>
+            <el-color-picker
+              v-model="state.config.titleColor"
+            ></el-color-picker>
+          </div>
+          <div class="flex justify-between items-center mb-3">
+            <span class="label">图片宽度</span>
+            <el-input-number
+              size="small"
+              style="width: 160px"
+              v-model="state.config.width"
+            />
+          </div>
+          <div class="flex justify-between items-center mb-3">
+            <span class="label">图片高度</span>
+            <el-input-number
+              size="small"
+              style="width: 160px"
+              v-model="state.config.height"
+            />
           </div>
         </div>
         <div>
-          <div class="text-right">
+          <div class="flex justify-between">
+            <el-button size="mini" type="primary" @click="resetConfig"
+              >重置</el-button
+            >
             <el-button size="mini" type="primary" @click="download"
-              >下载</el-button
+              >图片下载</el-button
             >
           </div>
         </div>
@@ -69,51 +96,94 @@
         class="box-view flex flex-col items-center justify-center"
         :style="viewStyle"
       >
-        {{ config.title }}
+        {{ state.config.title }}
       </div>
     </main>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
-import ColorRecomend from "./components/color-recomend/index.vue";
+import { defineComponent, reactive } from 'vue'
+import ColorRecomend from './components/color-recomend/index.vue'
 
 export default defineComponent({
-  name: "dashboard",
+  name: 'dashboard',
   components: {
     ColorRecomend,
   },
-});
+})
 </script>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import downloadJs from "downloadjs";
-import * as htmlToImage from "html-to-image";
+import { ref, computed } from 'vue'
+import downloadJs from 'downloadjs'
+import * as htmlToImage from 'html-to-image'
+import { getCurrentTimestamp } from '@/utils/index'
 
-const config = reactive({
-  bgColor: "#D49A89",
-  titleColor: "#F4F4F4",
-  title: "title",
+interface DefaultConfig {
+  bgColor: string
+  bgImg: null | File
+  titleColor: string
+  title: string
+  fontSize: number
+  width: number
+  height: number
+}
+
+const defaultConfig: DefaultConfig = {
+  bgColor: '#D49A89',
+  bgImg: null,
+  titleColor: '#F4F4F4',
+  title: 'title',
   fontSize: 36,
-});
+  width: 660,
+  height: 192,
+}
+const state = reactive({
+  config: {
+    ...defaultConfig,
+  },
+})
 const viewStyle = computed(() => {
+  const constantStyle = {
+    color: state.config.titleColor,
+    fontSize: state.config.fontSize + 'px',
+    width: state.config.width + 'px',
+    height: state.config.height + 'px',
+  }
+  if (state.config.bgImg) {
+    return {
+      ...constantStyle,
+      background: `url(${state.config.bgImg}) center/100% no-repeat`,
+    }
+  }
   return {
-    backgroundColor: config.bgColor,
-    color: config.titleColor,
-    fontSize: config.fontSize + "px",
-  };
-});
+    ...constantStyle,
+    background: state.config.bgColor,
+  }
+})
 const download = () => {
   htmlToImage
-    .toPng(document.getElementById("box-view")!, { quality: 1 })
+    .toPng(document.getElementById('box-view')!, { quality: 1 })
     .then(function (dataUrl) {
-      downloadJs(dataUrl, "my-node.png");
+      downloadJs(dataUrl, `${getCurrentTimestamp().split(' ').join('-')}.png`)
     })
     .catch(function (error) {
-      console.error("oops, something went wrong!", error);
-    });
-};
+      console.error('oops, something went wrong!', error)
+    })
+}
+const resetConfig = () => {
+  state.config = { ...defaultConfig }
+}
+const handleBgImg = (file: { raw: File }) => {
+  const fileReader = new FileReader()
+  fileReader.readAsDataURL(file.raw)
+  fileReader.onload = (event: any) => {
+    state.config.bgImg = event.target.result
+  }
+}
+const beforeUpload = () => {
+  return false
+}
 </script>
 
 <style lang="less" scoped>

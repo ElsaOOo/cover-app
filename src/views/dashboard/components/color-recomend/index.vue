@@ -3,8 +3,9 @@
   <el-dialog
     title="配色推荐"
     v-model="dialogVisible"
-    width="480"
-    :before-close="handleClose"
+    :width="480"
+    :before-close="closeDialog"
+    custom-class="recommend"
   >
     <ul class="flex flex-wrap justify-between items-center">
       <li
@@ -20,58 +21,64 @@
     </ul>
   </el-dialog>
 </template>
-//
 <script lang="ts">
+import { reactive } from 'vue'
+import { useDialog } from './useDialog'
+
 export default {
-  name: "color-recomend",
-};
-</script>
-<script setup lang="ts">
-import { reactive, ref } from "vue";
-import { useDialog } from "./useDialog";
-const { dialogVisible, openDialog, closeDialog } = useDialog();
-const dataList = reactive([
-  {
-    name: "ColorHunt",
-    about: "配色灵感收集",
-    link: "https://colorhunt.co/",
+  name: 'color-recomend',
+  setup() {
+    const { dialogVisible, openDialog, closeDialog } = useDialog()
+    const dataList = reactive([
+      {
+        name: 'ColorHunt',
+        about: '配色灵感收集',
+        link: 'https://colorhunt.co/',
+      },
+      {
+        name: 'CoolHue',
+        about: '超好看的渐变色',
+        link: 'https://webkul.github.io/coolhue/',
+      },
+      {
+        name: 'LOLCOLORS',
+        about: '独立小站，色彩组合推荐',
+        link: 'https://www.webdesignrankings.com/resources/lolcolors/',
+      },
+      {
+        name: 'neilorangepeel',
+        about: '随机颜色',
+        link: 'https://colours.neilorangepeel.com/',
+      },
+      {
+        name: 'BrandColors',
+        about: '世界知名品牌颜色收集网',
+        link: 'http://brandcolors.net/',
+      },
+      {
+        name: '中国色',
+        about: '中国传统配色',
+        link: 'http://zhongguose.com/',
+      },
+      {
+        name: 'colorfavs',
+        about: '提取图片中的配色',
+        link: 'http://www.colorfavs.com/',
+      },
+      {
+        name: 'flatuicolorpicker',
+        about: '颜色收集',
+        link: 'http://www.flatuicolorpicker.com/',
+      },
+    ])
+    return {
+      dialogVisible,
+      openDialog,
+      closeDialog,
+      dataList,
+    }
   },
-  {
-    name: "CoolHue",
-    about: "超好看的渐变色",
-    link: "https://webkul.github.io/coolhue/",
-  },
-  {
-    name: "LOLCOLORS",
-    about: "独立小站，色彩组合推荐",
-    link: "https://www.webdesignrankings.com/resources/lolcolors/",
-  },
-  {
-    name: "neilorangepeel",
-    about: "随机颜色",
-    link: "https://colours.neilorangepeel.com/",
-  },
-  {
-    name: "BrandColors",
-    about: "世界知名品牌颜色收集网",
-    link: "http://brandcolors.net/",
-  },
-  {
-    name: "中国色",
-    about: "中国传统配色",
-    link: "http://zhongguose.com/",
-  },
-  {
-    name: "colorfavs",
-    about: "提取图片中的配色",
-    link: "http://www.colorfavs.com/",
-  },
-  {
-    name: "flatuicolorpicker",
-    about: "颜色收集",
-    link: "http://www.flatuicolorpicker.com/",
-  },
-]);
+}
 </script>
 
 <style lang="less" scoped>
@@ -84,5 +91,11 @@ const dataList = reactive([
 }
 .about {
   color: #464660;
+}
+</style>
+
+<style>
+.recommend .el-dialog__header {
+  text-align: left;
 }
 </style>
