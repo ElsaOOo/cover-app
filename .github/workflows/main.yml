@@ -7,8 +7,6 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -70,3 +68,6 @@ jobs:
             cd  /usr/share/nginx/html
             wget http://github.com/ElsaOOo/cover-app/releases/latest/download/release.zip -O release.zip
             unzip release.zip
+            mv ./dist/* .
+            rm -rf dist
+            rm release.zip
