@@ -24,7 +24,7 @@ jobs:
     steps:
       # 第一步：下载源码（CI/CD拉取代码到自己的本地）
       - name: Checkout
-      uses: actions/checkout@main
+        uses: actions/checkout@main
 
       # 第二步：打包构建
       - name: Build
