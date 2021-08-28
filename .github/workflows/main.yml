@@ -61,7 +61,7 @@ jobs:
 
         # 第五步：部署到服务器
       - name: Deploy
-        uses: appleboy/ssh-action@main # 使用ssh链接服务器
+        uses: appleboy/ssh-action@master # 使用ssh链接服务器
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
